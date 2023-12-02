@@ -8,12 +8,12 @@ interface Params {
 }
 function OpinionDiv({ sentiment, children }: { sentiment: string, children: React.ReactNode }) {
   const negativeOpinion = (
-    <div className={`bg-red-700`}>
+    <div className={`py-2 px-4 rounded-2xl bg-red-700`}>
       {children}
     </div>
   );
   const positiveOpinion = (
-    <div className={`bg-green-700`}>
+    <div className={`py-2 px-4 rounded-2xl bg-green-700`}>
       {children}
     </div>
   );
