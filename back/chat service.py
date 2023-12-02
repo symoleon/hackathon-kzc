@@ -1,28 +1,45 @@
 from openai import OpenAI
 from Sentiment import Sentiment
+import os
+from dotenv import load_dotenv
+from Tag import Tag
 
 
+load_dotenv()
 
 def chat_request_tag(comment:str):
-    openai = OpenAI(api_key="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")
+    
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Proszę podać jedną frazę opisującą komentarz dotyczący restauracji, wykorzystując jeden z poniższych tagów:- Smaczne jedzenie- Ekskluzywne wyposażenie- Źle przygotowane- Przyjemna atmosfera- Nieprofesjonalne obsługa- Innowacyjne menu- Tłoczno i głośno- Drożej niż się spodziewałem - Słabe jedzenie - Tanio i smacznie Jeśli żaden z powyższych tagów nie jest odpowiedni, proszę użyć tagu INNE. "},
+            {"role": "system", "content": "Proszę podać jedną frazę opisującą komentarz dotyczący restauracji, wykorzystując jeden z poniższych tagów: JEDZIENIE - WYPOSAŻENIE - OBSŁUGA - ATMOSFERA - MENU - CENA  Jeśli żaden z powyższych tagów nie jest odpowiedni, proszę użyć tagu INNE. "},
             {"role": "user", "content": comment},
         ],
         temperature=0,
     )
     tag = response.choices[0].message.content
-    #data = response.id
-    #print(tag, data)
-    return tag
+    match tag:
+        case "JEDZENIE":
+            return Tag.FOOD
+        case "WYPOSAŻENIE":
+            return Tag.INTERIOR
+        case "OBSŁUGA":
+            return Tag.SERVISE
+        case "ATMOSFERA":
+            return Tag.ATMOSPHERE
+        case "MENU":
+            return Tag.MENU
+        case "CENA":
+            return Tag.COST
+        
+
+        
 def chat_request_sentiment(comment:str):
-    openai = OpenAI(api_key="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")
+    
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Proszę zanalizować czy komentarz dotyczący restauracji jest pozytywny, negatywny, neutralny, czy jest nieistotny. Jeśli pozytywny wypisz 0  jeżeli negtywny wypisz 1 jeżeli neutralny 2 i jeżeli nieistotny wypisz 3"},
+            {"role": "system", "content": "Proszę zanalizować czy komentarz dotyczący restauracji jest pozytywny, negatywny, neutralny, czy jest nieistotny"},
             {"role": "user", "content": comment},
         ],
         temperature=0,
@@ -30,18 +47,18 @@ def chat_request_sentiment(comment:str):
     value = response.choices[0].message.content
     print(value)
     match value:
-        case 0:
+        case "pozytywny":
             return Sentiment.GOOD
-        case 1:
+        case "negatywny":
             return Sentiment.BAD
-        case 2:
+        case "neutralny":
             return Sentiment.NEUTRAL
-        case 3: 
+        case "nieistotny": 
             return Sentiment.IRRELEVANT
     
     #data = response.id
-    
 
+openai = OpenAI(api_key=os.getenv("OPENAI_KEY"))
 #data = chat_request("lubie placki")
 data = chat_request_sentiment("jedzenie było obżydliwe, zdecydowanie z a drogog")
 #print (data)
