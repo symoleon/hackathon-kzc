@@ -36,11 +36,11 @@ export default function OpinionForm() {
             <form className="flex flex-col items-center" onSubmit={postComment}>
                 <div className="m-2 flex flex-col items-center">
                     <label htmlFor="username">Username</label>
-                    <input className="rounded-lg text-black" type="text" name="username" id="username" value={username} onChange={handleUsernameChange}/>
+                    <input className="rounded-lg bg-zinc-600" type="text" name="username" id="username" value={username} onChange={handleUsernameChange}/>
                 </div>
                 <div className="m-2 flex flex-col items-center">
                     <label htmlFor="opinion">Opinion</label>
-                    <textarea className="rounded-lg text-black resize-none" name="opinion" id="opinion" cols={60} rows={5} value={opinion} onChange={handleOpinionChange}></textarea>
+                    <textarea className="rounded-lg resize-none bg-zinc-600" name="opinion" id="opinion" cols={60} rows={5} value={opinion} onChange={handleOpinionChange}></textarea>
                 </div>
                 <button className="m-2 px-4 py-2 rounded-full bg-emerald-600" type="submit" disabled={isMutating}>{isMutating ? "..." : "Publish"}</button>
             </form>
