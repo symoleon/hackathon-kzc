@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from Sentiment import Sentiment
+# from Sentiment import Sentiment
 
 import chat_service
 
@@ -14,7 +14,7 @@ class Comment(BaseModel):
 
 class AnalyzedComment(Comment):
     date: datetime
-    sentiment: Sentiment
+    sentiment: str
     tag: list[str]
 
 
