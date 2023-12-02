@@ -1,0 +1,2 @@
+class Tag:
+    FOOD, INTERIOR, ATMOSPHERE, SERVISE, COST, MENU = range(6)
