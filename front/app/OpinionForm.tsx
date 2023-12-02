@@ -15,10 +15,10 @@ export default function OpinionForm() {
         setIsFetching(true);
         const formData = new FormData(e.currentTarget);
         const body = {
-            username: formData.get("username"),
-            opinion: formData.get("opinion"),
+            user_id: formData.get("username"),
+            content: formData.get("opinion"),
         };
-        await fetch("http://localhost:3000/api/comments", {
+        await fetch("http://localhost:8000/customer/comment", {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
