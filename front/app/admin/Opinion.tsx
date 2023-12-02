@@ -4,7 +4,7 @@ interface Params {
   opinion: string;
   sentiment: string;
   tags: string[];
-  date: number;
+  date: string;
 }
 function OpinionDiv({ sentiment, children }: { sentiment: string, children: React.ReactNode }) {
   const negativeOpinion = (
@@ -19,7 +19,7 @@ function OpinionDiv({ sentiment, children }: { sentiment: string, children: Reac
   );
   return (
     <div>
-      {sentiment === "negative" ? negativeOpinion : positiveOpinion}
+      {sentiment === "BAD" ? negativeOpinion : positiveOpinion}
     </div>
   );
 }
@@ -30,7 +30,7 @@ export default function Opinion({ username, opinion, sentiment, tags, date }: Pa
       <div className="flex items-baseline gap-4">
         <h3 className="font-bold">{username}</h3>
         <div className="text-sm text-zinc-200">
-          {`(${(new Date(date * 1000)).toLocaleDateString()})`}
+          {`(${(new Date(date)).toLocaleDateString()})`}
         </div>
         <div className="italic text-slate-200">
           {tags.reduce((acc, tag) => acc = `${acc} #${tag}`, "")}

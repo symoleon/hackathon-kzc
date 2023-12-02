@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel
+from typing import Any
 
 # from Sentiment import Sentiment
 
@@ -13,14 +14,13 @@ class Comment(BaseModel):
 
 
 class AnalyzedComment(Comment):
-    date: datetime
+    date: Any
     sentiment: str
-    tag: list[str]
+    tags: list[str]
 
 
 def analyze_comment(comment: Comment) -> AnalyzedComment:
-
-    analyzed_comment = AnalyzedComment.model_validate({
+    analyzed_comment = AnalyzedComment(**{
         **comment.model_dump(),
         "date": datetime.today(),
         "sentiment": chat_service.chat_request_sentiment(comment.content),

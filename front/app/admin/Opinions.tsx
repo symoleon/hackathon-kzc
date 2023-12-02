@@ -1,7 +1,6 @@
 import CategorizedOpinions from "./CategorizedOpinions";
 
 interface Opinion {
-  id: number;
   username: string;
   opinion: string;
   sentiment: string;
@@ -11,8 +10,11 @@ interface Opinion {
 
 export default async function Opinions() {
 
-  const comments = await fetch('http://localhost:3000/api/comments?admin=true', {cache: "no-cache"}).then(res => res.json()) as Opinion[];
-  comments.sort((a, b) => b.date - a.date);
+  const res = await fetch('http://localhost:8000/admin/comment', {cache: "no-cache"}).then(res => res.json()) as string[][];
+  const comments = res.map((comment: string[]) => ({username: comment[0], opinion: comment[1],date: comment[2], sentiment: comment[3], tags: JSON.parse(comment[4].replaceAll("'", '"'))}));
+  // console.log(comments);
+  // comments.sort((a, b) => b.date - a.date);
+  comments.reverse();
   return (
     <div className="flex flex-col items-center gap-4">
       <h1 className="tracking-wide text-3xl font-bold">Opinions</h1>

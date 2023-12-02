@@ -3,12 +3,11 @@ import { useState, useEffect } from "react";
 import Opinion from "./Opinion";
 
 interface Opinion {
-  id: number;
   username: string;
   opinion: string;
   sentiment: string;
   tags: string[];
-  date: number;
+  date: string;
 }
 interface Params {
   opinions: Opinion[];
@@ -74,30 +73,30 @@ export default function CategorizedOpinions( { opinions }: Params) {
     } else {
       let newOpinions: Opinion[] = [];
       if (food) {
-        const foodOpinions = opinions.filter((opinion) => opinion.tags.includes("FOOD"));
+        const foodOpinions = opinions.filter((opinion) => opinion.tags.includes("JEDZENIE"));
         newOpinions = foodOpinions.reduce(opinionReducer, newOpinions);
       }
       if (interior) {
-        const interiorOpinions = opinions.filter((opinion) => opinion.tags.includes("INTERIOR"));
+        const interiorOpinions = opinions.filter((opinion) => opinion.tags.includes("WYPOSAŻENIE"));
         newOpinions = interiorOpinions.reduce(opinionReducer, newOpinions);
       }
       if (atmosphere) {
-        const atmosphereOpinions = opinions.filter((opinion) => opinion.tags.includes("ATMOSPHERE"));
+        const atmosphereOpinions = opinions.filter((opinion) => opinion.tags.includes("ATMOSFERA"));
         newOpinions = atmosphereOpinions.reduce(opinionReducer, newOpinions);
       }
       if (service) {
-        const serviceOpinions = opinions.filter((opinion) => opinion.tags.includes("SERVICE"));
+        const serviceOpinions = opinions.filter((opinion) => opinion.tags.includes("OBSŁUGA"));
         newOpinions = serviceOpinions.reduce(opinionReducer, newOpinions);
       }
       if (cost) {
-        const costOpinions = opinions.filter((opinion) => opinion.tags.includes("COST"));
+        const costOpinions = opinions.filter((opinion) => opinion.tags.includes("CENA"));
         newOpinions = costOpinions.reduce(opinionReducer, newOpinions);
       }
       if (menu) {
         const menuOpinions = opinions.filter((opinion) => opinion.tags.includes("MENU"));
         newOpinions = menuOpinions.reduce(opinionReducer, newOpinions);
       }
-      newOpinions.sort((a, b) => b.date - a.date);
+      // newOpinions.sort((a, b) => b.date - a.date);
       
       setFilteredOpinions(newOpinions);
     }
@@ -105,7 +104,7 @@ export default function CategorizedOpinions( { opinions }: Params) {
 
   useEffect(() => {
     const negativeOpinionsCount = filteredOpinions.reduce((acc, opinion) => {
-      if (opinion.sentiment === "negative") {
+      if (opinion.sentiment === "BAD") {
         acc++;
       }
       return acc;
@@ -134,7 +133,7 @@ export default function CategorizedOpinions( { opinions }: Params) {
       </div>
       <ul>
         {filteredOpinions.map((comment: Opinion) => (
-          <li key={comment.id} className="m-4">
+          <li key={comment.username} className="m-4">
             <Opinion username={comment.username} opinion={comment.opinion} sentiment={comment.sentiment} tags={comment.tags} date={comment.date}/>
           </li>
         ))}
