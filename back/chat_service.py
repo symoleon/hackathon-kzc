@@ -15,24 +15,22 @@ def chat_request_tag(comment:str):
             {"role": "system", "content": "Proszę Wypisać które tagi pasują do podanego komentarza: JEDZIENIE - WYPOSAŻENIE - OBSŁUGA - ATMOSFERA - MENU - CENA. tagi wypisz po przecinku bez spacji"},
             {"role": "user", "content": comment},
         ],
-        temperature=0,
+        temperature=1,
     )
     tag_tab = []
     tag = response.choices[0].message.content
-    match tag:
-        case tag.find("JEDZIENIE"):
-            tag_tab.append("JEDZENIE")
-        case tag.find("WYPOSAŻENIE"):
-            tag_tab.append("WYPOSAŻENIE")
-        case tag.find("OBSŁUGA"):
-            tag_tab.append("OBSŁUGA")
-        case tag.find("ATMOSFERA"):
-            tag_tab.append("ATMOSFERA")
-        case tag.find("MENU"):
-            tag_tab.append("MENU")
-        case tag.find("CENA"):
-            tag_tab.append("CENA")
-        
+    if(tag.find("JEDZIENIE") != -1):
+        tag_tab.append("JEDZENIE")
+    if(tag.find("WYPOSAŻENIE") != -1):
+        tag_tab.append("WYPOSAŻENIE")
+    if(tag.find("OBSŁUGA") != -1):
+        tag_tab.append("OBSŁUGA")
+    if(tag.find("ATMOSFERA") != -1):
+        tag_tab.append("ATMOSFERA")
+    if(tag.find("MENU") != -1):
+        tag_tab.append("MENU")
+    if(tag.find("CENA") != -1):
+        tag_tab.append("CENA")
     return tag_tab
         
 
@@ -42,24 +40,14 @@ def chat_request_sentiment(comment:str):
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Proszę zanalizować czy komentarz dotyczący restauracji jest pozytywny, negatywny, neutralny, czy jest nieistotny, odpowiedź jedną z fraz"},
+            {"role": "system", "content": "Proszę zanalizować czy komentarz dotyczący restauracji jest pozytywny, negatywny, neutralny, czy jest nieistotny. Lista odpowiedzi [GOOD, BAD, NEUTRAL, IRRELEVANT]"},
             {"role": "user", "content": comment},
         ],
         temperature=0,
     )
     value = response.choices[0].message.content
-    print(value)
-    match value:
-        case "pozytywny":
-            return Sentiment.GOOD
-        case "negatywny":
-            return Sentiment.BAD
-        case "neutralny":
-            return Sentiment.NEUTRAL
-        case "nieistotny": 
-            return Sentiment.IRRELEVANT
-    
-    #data = response.id
+    return value
+
     
 def chat_request_analysis(comment:str):
     openai = OpenAI(api_key=os.getenv("OPENAI_KEY"))
@@ -75,3 +63,6 @@ def chat_request_analysis(comment:str):
     return value
 
 
+# data =chat_request_tag("jedzenie było pyszne, ale bardzo i to bardzo drogie")
+# data =chat_request_sentiment("jedzenie było pyszne, ale bardzo i to bardzo drogie")
+# print(data)
