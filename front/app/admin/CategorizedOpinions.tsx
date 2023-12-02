@@ -59,7 +59,8 @@ export default function CategorizedOpinions( { opinions }: Params) {
     (<div className="py-2 px-4 rounded-full bg-zinc-900 cursor-pointer select-none" onClick={handleMenuCheckbox}>Menu</div>);
 
   const [filteredOpinions, setFilteredOpinions] = useState(opinions);
-
+  const [negativeOpinionsCount, setNegativeOpinionsCount] = useState(0);
+  const [positiveOpinionsCount, setPositiveOpinionsCount] = useState(0);
   const opinionReducer = (acc: Opinion[], opinion: Opinion) => {
     if (!acc.includes(opinion)) {
       acc.push(opinion);
@@ -97,13 +98,32 @@ export default function CategorizedOpinions( { opinions }: Params) {
         newOpinions = menuOpinions.reduce(opinionReducer, newOpinions);
       }
       newOpinions.sort((a, b) => b.date - a.date);
+      
       setFilteredOpinions(newOpinions);
     }
   }, [food, interior, atmosphere, service, cost, menu]);
+
+  useEffect(() => {
+    const negativeOpinionsCount = filteredOpinions.reduce((acc, opinion) => {
+      if (opinion.sentiment === "negative") {
+        acc++;
+      }
+      return acc;
+    }, 0);
+    const positiveOpinionsCount = filteredOpinions.length - negativeOpinionsCount;
+    setNegativeOpinionsCount(negativeOpinionsCount);
+    setPositiveOpinionsCount(positiveOpinionsCount);
+  }, [filteredOpinions]);
   
 
   return (
     <div>
+      <div>
+        <div className="flex items-center justify-center gap-4">
+          <div className="py-2 px-4 rounded-full bg-red-700">{negativeOpinionsCount} negative</div>
+          <div className="py-2 px-4 rounded-full bg-green-700">{positiveOpinionsCount} positive</div>
+        </div>
+      </div>
       <div className="flex items-center justify-center gap-4">
         {foodLabel}
         {interiorLabel}
