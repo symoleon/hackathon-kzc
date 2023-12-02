@@ -27,10 +27,10 @@ function OpinionDiv({ sentiment, children }: { sentiment: string, children: Reac
 export default function Opinion({ username, opinion, sentiment, tags, date }: Params) {
   return (
     <OpinionDiv sentiment={sentiment}>
-      <div className="flex gap-4">
+      <div className="flex items-baseline gap-4">
         <h3 className="font-bold">{username}</h3>
-        <div>
-          {(new Date(date * 1000)).toLocaleDateString()}
+        <div className="text-sm text-zinc-200">
+          {`(${(new Date(date * 1000)).toLocaleDateString()})`}
         </div>
         <div className="italic text-slate-200">
           {tags.reduce((acc, tag) => acc = `${acc} #${tag}`, "")}
