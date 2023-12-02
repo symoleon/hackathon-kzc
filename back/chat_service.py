@@ -2,7 +2,7 @@ from openai import OpenAI
 from Sentiment import Sentiment
 import os
 from dotenv import load_dotenv
-from Tag import Tag
+
 
 
 load_dotenv()
@@ -12,25 +12,13 @@ def chat_request_tag(comment:str):
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Proszę podać jedną frazę opisującą komentarz dotyczący restauracji, wykorzystując jeden z poniższych tagów: JEDZIENIE - WYPOSAŻENIE - OBSŁUGA - ATMOSFERA - MENU - CENA  Jeśli żaden z powyższych tagów nie jest odpowiedni, proszę użyć tagu INNE. "},
+            {"role": "system", "content": "Proszę podać jedną frazę opisującą komentarz dotyczący restauracji, wykorzystując jeden z poniższych tagów: JEDZIENIE - WYPOSAŻENIE - OBSŁUGA - ATMOSFERA - MENU - CENA  Jeśli żaden z powyższych tagów nie jest odpowiedni, proszę użyć tagu NONE. "},
             {"role": "user", "content": comment},
         ],
         temperature=0,
     )
     tag = response.choices[0].message.content
-    match tag:
-        case "JEDZENIE":
-            return Tag.FOOD
-        case "WYPOSAŻENIE":
-            return Tag.INTERIOR
-        case "OBSŁUGA":
-            return Tag.SERVISE
-        case "ATMOSFERA":
-            return Tag.ATMOSPHERE
-        case "MENU":
-            return Tag.MENU
-        case "CENA":
-            return Tag.COST
+    return tag
         
 
         
@@ -39,7 +27,7 @@ def chat_request_sentiment(comment:str):
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Proszę zanalizować czy komentarz dotyczący restauracji jest pozytywny, negatywny, neutralny, czy jest nieistotny"},
+            {"role": "system", "content": "Proszę zanalizować czy komentarz dotyczący restauracji jest pozytywny, negatywny, neutralny, czy jest nieistotny, odpowiedź jedną z fraz"},
             {"role": "user", "content": comment},
         ],
         temperature=0,
@@ -57,8 +45,16 @@ def chat_request_sentiment(comment:str):
             return Sentiment.IRRELEVANT
     
     #data = response.id
-
+    
+def chat_request_analisis(comment:str):
+    response = openai.chat.completions.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "do zanalizowanych danych dodaj komentarz dla każdego miesiąca będący podsumowaniem zmian od ostatniego miesiąca , np.  pogorszył się stan jedzenia , na koniec dodaj opis tendencji w formie jednego zdania dla każdego z tagów"},
+            {"role": "user", "content": comment},
+        ],
+        temperature=1,
+    )
+    value = response.choices[0].message.content
+    return value
 openai = OpenAI(api_key=os.getenv("OPENAI_KEY"))
-#data = chat_request("lubie placki")
-data = chat_request_sentiment("jedzenie było obżydliwe, zdecydowanie z a drogog")
-#print (data)
