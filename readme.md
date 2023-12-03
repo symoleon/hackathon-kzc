@@ -13,4 +13,6 @@ pip install fastapi
 pip install openai
 pip install python-dotenv
 ```
-Then go to the *back* catalog, and run `uvicorn request_handling:app --reload` to start backend server
+Then go to the *back* catalog, create `.env` file and add
+`OPENAI_KEY=<Your_OpenAI_key>`.
+After that you can run `uvicorn request_handling:app --reload` to start backend server
