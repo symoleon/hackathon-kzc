@@ -100,7 +100,7 @@ export default function CategorizedOpinions( { opinions }: Params) {
       
       setFilteredOpinions(newOpinions);
     }
-  }, [food, interior, atmosphere, service, cost, menu]);
+  }, [opinions, food, interior, atmosphere, service, cost, menu]);
 
   useEffect(() => {
     const negativeOpinionsCount = filteredOpinions.reduce((acc, opinion) => {
