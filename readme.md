@@ -16,3 +16,14 @@ pip install python-dotenv
 Then go to the *back* catalog, create `.env` file and add
 `OPENAI_KEY=<Your_OpenAI_key>`.
 After that you can run `uvicorn request_handling:app --reload` to start backend server
+
+## Build
+If you want to build frontend you need to run backend server first, then go to the *front* catalog and run
+```
+npm run build
+```
+After building you can run
+```
+npm run start
+```
+to start frontend server
